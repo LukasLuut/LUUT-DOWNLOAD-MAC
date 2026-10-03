@@ -1,0 +1,44 @@
+name: Build macOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: write  # attach the .dmg files to the GitHub Release when a v* tag is pushed
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15        # Apple Silicon (arm64)
+          - runner: macos-15-intel  # Intel (x86_64)
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Build .app and .dmg
+        env:
+          PYTHON: python
+        run: bash build_mac.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LuutVideoDownloader-macOS-${{ runner.arch }}
+          path: dist/*.dmg
+          if-no-files-found: error
+
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.dmg

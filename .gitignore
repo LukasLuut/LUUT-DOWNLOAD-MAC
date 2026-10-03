@@ -1,0 +1,9 @@
+.venv/
+build/
+dist/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+# yt-dlp.exe fetched for development (tools/fetch_ytdlp.py bin)
+bin/

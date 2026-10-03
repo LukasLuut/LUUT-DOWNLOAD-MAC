@@ -1,0 +1,4 @@
+# Runtime dependencies
+PySide6==6.11.2
+# Provides the ffmpeg binary bundled into the executable (and used in development)
+imageio-ffmpeg==0.6.0
