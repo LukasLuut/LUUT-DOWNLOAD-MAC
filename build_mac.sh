@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 # Luut Video Downloader - build for macOS (.app + .dmg). Runs on a Mac or on the GitHub Actions macOS runners.
-# The .dmg is built for the architecture of the machine running this script (arm64 = Apple Silicon, x86_64 = Intel).
+# Apple Silicon (arm64) only: the official yt-dlp_macos no longer runs on Intel Macs.
 set -euo pipefail
 cd "$(dirname "$0")"
+
+if [ "$(uname -m)" != "arm64" ]; then
+    echo "Este build exige um Mac com Apple Silicon (arm64): o yt-dlp oficial para macOS nao roda em Macs Intel."
+    exit 1
+fi
 
 APP_NAME="Luut Video Downloader"
 PYTHON="${PYTHON:-python3}"

@@ -346,17 +346,16 @@ Instalador (opcional): `packaging\installer.iss` para o [Inno Setup 6](https://j
 O instalador de Mac só pode ser gerado **em um macOS** (o PyInstaller não faz compilação cruzada). Duas opções:
 
 **GitHub Actions (recomendado):** o workflow `.github/workflows/build-mac.yml` roda em cada push na `main`, em pull
-requests e manualmente (aba *Actions* → *Build macOS* → *Run workflow*). Ele gera dois instaladores:
+requests e manualmente (aba *Actions* → *Build macOS* → *Run workflow*). Ele gera
+`LuutVideoDownloader-<versão>-macOS-arm64.dmg`, para Macs com **Apple Silicon** (M1 ou mais novo).
 
-| Runner           | Arquitetura                | Arquivo                                          |
-| ---------------- | -------------------------- | ------------------------------------------------ |
-| `macos-15`       | Apple Silicon (M1/M2/M3…)  | `LuutVideoDownloader-<versão>-macOS-arm64.dmg`   |
-| `macos-15-intel` | Intel                      | `LuutVideoDownloader-<versão>-macOS-x86_64.dmg`  |
+**Macs Intel não são suportados:** o `yt-dlp_macos` oficial só traz o Python para ARM (a parte Intel do arquivo é
+apenas o inicializador), e o yt-dlp não publica outro executável para Mac Intel.
 
 Os `.dmg` ficam em *Artifacts* na página da execução. Ao enviar uma tag `v*` (ex.: `git tag v1.3.0 && git push --tags`),
 eles também são anexados à Release do GitHub.
 
-**Em um Mac:** `bash build_mac.sh` (Python 3.13). O script instala as dependências, roda os testes, gera o ícone
+**Em um Mac com Apple Silicon:** `bash build_mac.sh` (Python 3.13). O script instala as dependências, roda os testes, gera o ícone
 `.icns` e o FFmpeg, baixa o `yt-dlp_macos` oficial verificado, roda o PyInstaller com
 `Luut Video Downloader macOS.spec`, confere o pacote, faz um teste rápido do app (acha e executa o yt-dlp embutido) e
 cria o `.dmg` em `dist/`.
